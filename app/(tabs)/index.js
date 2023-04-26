@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,12 @@ import {
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import Parkingbutton from "../../Components/Parkingbutton";
-import { Redirect, useFocusEffect, useNavigation } from "expo-router";
+import {
+  Redirect,
+  useFocusEffect,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import Colors from "../../Constants/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetBookingsMutation } from "../../store/apiSlice";
@@ -29,14 +34,13 @@ const index = () => {
   const [date, setDate] = useState(currentDateStr);
   const [dateerror, setDateerror] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const tempuser = useRef();
+  tempuser.current = user;
 
   const dispatch = useDispatch();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  if (!user) {
-    // Redirect to the login screen if the user is not authenticated.
-    return <Redirect href="/signin" />;
-  }
+  const router = useRouter();
   const bookings = useSelector((state) => state.bookings.bookings);
   const getData = async () => {
     try {
@@ -97,20 +101,9 @@ const index = () => {
   const onTabFocus = useCallback(() => {
     getData();
     console.log("Hello");
-    // Call your function here
   }, []);
   useFocusEffect(onTabFocus);
 
-  const getUser = async () => {
-    const tempuser = await AsyncStorage.getItem("user");
-    if (tempuser) {
-      dispatch(userSlice.actions.userlogin(tempuser));
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.datesearch}>

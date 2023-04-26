@@ -20,7 +20,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [showpassword, setShowpassword] = useState(false);
+  const [showpassword, setShowpassword] = useState(true);
   const [errors, setErrors] = useState([false, false, false]);
   const [loading, setLoading] = useState(false);
   const [signupUser] = useSignupUserMutation();
@@ -55,9 +55,9 @@ const Signup = () => {
       if (response.error) {
         console.log(response);
         console.log("error");
-        console.log(response.error.data.message);
+        alert(response.error.data.message);
       } else {
-        dispatch(userSlice.actions.userlogin(response.data));
+        dispatch(userSlice.actions.userLogin(response.data));
         await AsyncStorage.setItem("user", JSON.stringify(response.data));
         router.replace("/");
       }

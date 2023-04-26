@@ -2,16 +2,22 @@
   "expo": {
     "userInterfaceStyle": "automatic",
     "ios": {
-     "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic"
     },
     "android": {
-     "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic",
+      "package": "com.balakrishnasani.myparking"
     },
     "scheme": "acme",
     "web": {
       "bundler": "metro"
     },
     "name": "myparking",
-    "slug": "myparking"
+    "slug": "myparking",
+    "extra": {
+      "eas": {
+        "projectId": "e019e901-216c-4e88-aace-400f7ef31ee4"
+      }
+    }
   }
 }

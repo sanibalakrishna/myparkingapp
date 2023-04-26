@@ -6,14 +6,15 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    userlogin: (state, action) => {
+    userLogin: (state, action) => {
       if (action.payload != undefined) {
         state.user = action.payload;
+        console.log(state.user);
       } else {
         state.user = null;
       }
     },
-    userlogout: (state) => {
+    userLogout: (state) => {
       state.user = null;
     },
   },

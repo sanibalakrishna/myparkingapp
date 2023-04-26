@@ -12,7 +12,7 @@ import {
 import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import Colors from "../Constants/Colors";
-import { Link, useRouter } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import { color } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginUserMutation } from "../store/apiSlice";
@@ -24,20 +24,17 @@ const signin = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showpassword, setShowpassword] = useState(false);
+  const [showpassword, setShowpassword] = useState(true);
   const [errors, setErrors] = useState([false, false]);
   const dispatch = useDispatch();
   const [userLogin] = useLoginUserMutation();
   const user = useSelector((state) => state);
   const router = useRouter();
-  const storeUserData = async (userData) => {
-    try {
-      await AsyncStorage.setItem("user", JSON.stringify(userData));
-      console.log("User data stored successfully");
-    } catch (error) {
-      console.log("Error storing user data:", error);
-    }
-  };
+  console.log(user);
+  if (!user) {
+    <Redirect href="/signin" />;
+  }
+
   const handleSignIn = async () => {
     setLoading(true);
     try {
@@ -59,10 +56,10 @@ const signin = () => {
       }
       const response = await userLogin({ email, password });
       if (response.error) {
-        console.log(response.error.data.message);
+        alert(response.error.data.message);
       } else {
-        dispatch(userSlice.actions.userlogin(response.data));
-        await storeUserData(JSON.stringify(response.data));
+        dispatch(userSlice.actions.userLogin(response.data));
+        await AsyncStorage.setItem("user", JSON.stringify(response.data));
         router.replace("/");
       }
 

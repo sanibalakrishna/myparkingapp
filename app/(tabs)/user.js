@@ -5,29 +5,23 @@ import {
   View,
   useColorScheme,
 } from "react-native";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userSlice } from "../../store/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Colors from "../../Constants/Colors";
-import { Redirect, useRouter } from "expo-router";
+import { Redirect, useRouter, useFocusEffect } from "expo-router";
 
 export default function Faviroutes() {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const router = useRouter();
 
-  const removeUserData = async () => {
-    try {
-      await console.log("User data removed successfully");
-    } catch (error) {
-      console.log("Error removing user data:", error);
-    }
-  };
+  const router = useRouter();
 
   const handleLogout = () => {
     try {
-      dispatch(userSlice.actions.userlogout());
+      dispatch(userSlice.actions.userLogout());
       AsyncStorage.removeItem("user");
       router.replace("/signin");
     } catch (error) {
@@ -35,13 +29,14 @@ export default function Faviroutes() {
       alert("something went wrong");
     }
   };
+
   return (
     <View style={styles.container}>
       <Text style={{ color: Colors[colorScheme ?? "light"].text }}>
-        {user.name}
+        {user?.name}
       </Text>
       <Text style={{ color: Colors[colorScheme ?? "light"].text }}>
-        {user.email}
+        {user?.email}
       </Text>
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={{ textAlign: "center", fontSize: 15 }}>Logout</Text>
